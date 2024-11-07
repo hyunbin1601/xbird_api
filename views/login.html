@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>API SERVER LOGIN</title>
+        <style>
+            .input-group label { width: 200px; display: inline-block; }
+        </style>
+    </head>
+    <body>
+        {% if user and user.id %}
+        <span class="user-name">hi {{user.nickname}}</span>
+        <a href="/auth/logout">
+            <button>LOGOUT</button>
+        </a>
+        <fieldset>
+            <legend>register domain</legend>
+            <form action="domain" method="post">
+                <div>
+                    <label for="type-free">free</label>
+                    <input type="radio" id="type-free" name="type" value="free" checked>
+                    <label for="type-premium">premium</label>
+                    <input type="radio" id="type-premium" name="type" value="premium">
+                </div>
+                <div>
+                    <label for="host">domain</label>
+                    <input type="text" id="host" name="host" placeholder="localhost.com">
+                </div>
+                <button>SAVE</button>
+            </form>
+        </fieldset>
+        <table>
+            <tr>
+                <th>domain address</th>
+                <th>type</th>
+                <th>client secret key</th>
+            </tr>
+            {% for domain in domains %}
+            <tr>
+                <td>{{domain.host}}</td>
+                <td>{{domain.type}}</td>
+                <td>{{domain.client_secret}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <form action="/auth/login" method="post">
+            <h2>please login to your xbird account</h2>
+            <div class="input-group">
+                <label for="email">email</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="input-group">
+                <label for="password">password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <button>LOGIN</button>
+        </form>
+        <script>
+            window.onload = () => {
+                if (new URL(location.href).searchParams.get('error')) {
+                    alert(new URL(location.href).searchParams.get('error'));
+                }
+            }
+        </script>
+        {% endif %}
+    </body>
+</html>
